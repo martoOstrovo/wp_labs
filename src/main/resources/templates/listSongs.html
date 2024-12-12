@@ -1,0 +1,36 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Songs Homepage - Welcome to My Music Store</title>
+  <style>
+    body {
+      width: 800px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Welcome to My Music Store</h1>
+</header>
+<main>
+  <div th:if="${hasError}">
+    <h3 th:text="${error}"></h3>
+  </div>
+  <h2>Choose a song:</h2>
+  <form th:method="post" th:action="@{'/artists'}">
+
+    <div th:each="song : ${songs}">
+      <input type="radio" name="trackId" id="trackId" th:value="${song.getTrackId()}">
+      <span th:text="'Title: ' + ${song.getTitle()} + ' Genre:' + ${song.getGenre()}
+         + 'Release year: ' + ${song.getReleaseYear()} + 'Album: ' + ${song.getAlbum()}"></span> <br>
+      <a th:href="@{'/songs/delete/{id}'(id=${song.getID()})}">Delete</a> <br>
+      <a th:href="@{'/songs/edit/{id}' (id=${song.getID()})}">Edit</a>
+    </div>
+
+    <button type="submit">Submit selected song</button>
+  </form>
+  <a th:href="@{'songs/add-form'}">add a song</a>
+</main>
+</body>
+</html>
