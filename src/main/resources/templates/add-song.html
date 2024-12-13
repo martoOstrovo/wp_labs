@@ -8,22 +8,22 @@
     <form th:method="post" th:action="@{'/songs/add'}">
         <p>
             <label for="trackId">Track ID</label>
-            <input id="trackId" name="trackId" th:value="${song != null}? ${song.getTrackId()} : ''">
+            <input type="text" id="trackId" name="trackId" th:value="${song != null}? ${song.getTrackId()} : ''">
         </p>
 
         <p>
             <label for="title">Title</label>
-            <input id="title" name="title" th:value="${song != null}? ${song.getTitle()} : ''">
+            <input type="text" id="title" name="title" th:value="${song != null}? ${song.getTitle()} : ''">
         </p>
 
         <p>
             <label for="genre">Genre</label>
-            <input id="genre" name="genre" th:value="${song != null}? ${song.getGenre()} : ''">
+            <input type="text" id="genre" name="genre" th:value="${song != null}? ${song.getGenre()} : ''">
         </p>
 
         <p>
             <label for="releaseYear">Release year</label>
-            <input id="releaseYear" name="releaseYear" th:value="${song != null}? ${song.getReleaseYear()} : ''">
+            <input type="number" id="releaseYear" name="releaseYear" th:value="${song != null}? ${song.getReleaseYear()} : ''">
         </p>
 
         <div>

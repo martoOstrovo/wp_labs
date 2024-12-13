@@ -1,10 +1,11 @@
 package mk.ukim.finki.wp.lab.service.Implementation;
 
+import jakarta.transaction.Transactional;
 import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 import mk.ukim.finki.wp.lab.model.exceptions.NoSongTitleMatchesSearchException;
-import mk.ukim.finki.wp.lab.repository.SongRepository;
+import mk.ukim.finki.wp.lab.repository.jpa.SongRepository;
 import mk.ukim.finki.wp.lab.service.SongService;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,15 @@ public class SongServiceImplementation implements SongService {
 
     @Override
     public Artist addArtistToSong(Artist artist, Song song) {
-        if(song.getPerformers().contains(artist)) {
-            throw new RuntimeException("Song already has performer " + artist);
+        if(song == null  || artist == null) throw new RuntimeException("Artist or Song cannot be null");
+        if(song.getPerformers().stream().anyMatch(per -> per.getID().equals(artist.getID()))) {
+            throw new RuntimeException("Song already has performer " + artist.getFirstName() + " " + artist.getLastName());
         }
-        return repository.addArtistToSong(artist, song);
+        song.getPerformers().add(artist);
+        repository.save(song);
+        return artist;
     }
+
 
     @Override
     public Song findByTrackId(String trackId) {
@@ -43,7 +48,7 @@ public class SongServiceImplementation implements SongService {
 
     @Override
     public List<Song> findBySearchString(String searchString) {
-        List<Song> songs = repository.findBySearchString(searchString);
+        List<Song> songs = repository.findAllByTitleLike(searchString);
         if(songs == null || songs.isEmpty()) {
             throw new NoSongTitleMatchesSearchException(searchString);
         }
@@ -51,11 +56,14 @@ public class SongServiceImplementation implements SongService {
     }
 
     @Override
+    @Transactional
     public Song saveSong(String trackId, String title, String genre, int releaseYear, Album album) {
+        repository.deleteByTrackId(trackId);
         return repository.save(new Song(trackId,title,genre, releaseYear, new ArrayList<>(), album));
     }
 
     @Override
+    @Transactional
     public void deleteByID(Long id) {
         repository.deleteByID(id);
     }

@@ -16,11 +16,11 @@ public class DataHolder {
 
     @PostConstruct
     public void init() {
-        artists.add(new Artist(210L,"Bob", "Bobovski" ,"test1"));
-        artists.add(new Artist(220L,"Bobi", "Galic", "test2"));
-        artists.add(new Artist(230L,"Teo", "Eftimov", "test3"));
-        artists.add(new Artist(240L,"Nemanja", "Jokic", "test4"));
-        artists.add(new Artist(250L,"David", "Ivanovski", "test5"));
+        artists.add(new Artist("Bob", "Bobovski" ,"test1"));
+        artists.add(new Artist("Bobi", "Galic", "test2"));
+        artists.add(new Artist("Teo", "Eftimov", "test3"));
+        artists.add(new Artist("Nemanja", "Jokic", "test4"));
+        artists.add(new Artist("David", "Ivanovski", "test5"));
 
         Album a1=new Album("Thriller", "Pop", "1982");
         Album a2=new Album("Back in Black", "Rock", "1980");

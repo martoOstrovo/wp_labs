@@ -2,18 +2,19 @@ package mk.ukim.finki.wp.lab.web.controller;
 
 import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.service.AlbumService;
-import mk.ukim.finki.wp.lab.service.Implementation.SongServiceImplementation;
+import mk.ukim.finki.wp.lab.service.SongService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/songs")
 public class SongController {
-    private final SongServiceImplementation songService;
+    private final SongService songService;
     private final AlbumService albumService;
 
-    public SongController(SongServiceImplementation songService, AlbumService albumService) {
+    public SongController(SongService songService, AlbumService albumService) {
         this.songService = songService;
         this.albumService = albumService;
     }
@@ -43,8 +44,9 @@ public class SongController {
                            @RequestParam String genre,
                            @RequestParam int releaseYear,
                            @RequestParam Long albumID) {
-        if(albumService.findById(albumID).isPresent()) {
-            Album album = albumService.findById(albumID).get();
+        Optional<Album> optionalAlbum = albumService.findById(albumID);
+        if(optionalAlbum.isPresent()) {
+            Album album = optionalAlbum.get();
             songService.saveSong(trackId, title, genre, releaseYear, album);
             return "redirect:/songs";
         } else {
